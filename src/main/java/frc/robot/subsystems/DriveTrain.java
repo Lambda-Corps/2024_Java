@@ -252,14 +252,12 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void resetPose(Pose2d pose){
-      m_left_leader.setPosition(metersToRotations(pose.getX()));
-      m_right_leader.setPosition(metersToRotations(pose.getY()));
       m_Odometry.resetPosition(
         pose.getRotation(),
-        m_left_leader.getPosition().getValue(), 
-        m_right_leader.getPosition().getValue(), 
+        rotationsToMeters(m_left_leader.getPosition().getValue()), 
+        rotationsToMeters(m_right_leader.getPosition().getValue()), 
         pose);
-    //m_Odometry.resetPosition(m_gyro.getRotation2d(), 0, 0, pose);
+   //m_Odometry.resetPosition(m_gyro.getRotation2d(), 0, 0, pose);
   }
 
   public ChassisSpeeds getCurrentSpeeds() {
@@ -276,7 +274,8 @@ public class DriveTrain extends SubsystemBase {
 
     double voltage = RobotController.getBatteryVoltage();
 
-    drive_volts(diffSpeeds.leftMetersPerSecond / voltage, diffSpeeds.rightMetersPerSecond / voltage);
+    drive_volts(diffSpeeds.leftMetersPerSecond, diffSpeeds.rightMetersPerSecond);
+    // drive_volts(diffSpeeds.leftMetersPerSecond / voltage, diffSpeeds.rightMetersPerSecond / voltage);
   }
 
   public Command followRamseteCommand(){
